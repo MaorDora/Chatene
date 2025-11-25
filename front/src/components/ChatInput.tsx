@@ -11,11 +11,24 @@ type ChatInputProps = {
 export default function ChatInput({ input, setInput, handleSend, isLoading }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // שינוי גובה אוטומטי
+  // שינוי גובה אוטומטי וניהול גלילה
   useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    const textarea = textareaRef.current;
+    if (textarea) {
+      // 1. איפוס הגובה ל'אוטומטי' כדי לאפשר הקטנה אם מחקת טקסט
+      textarea.style.height = 'auto';
+      
+      // 2. קביעת גבול עליון לגובה (למשל 200 פיקסלים)
+      const maxHeight = 200; 
+      
+      // 3. בדיקה האם התוכן חורג מהגובה המקסימלי
+      if (textarea.scrollHeight > maxHeight) {
+        textarea.style.height = `${maxHeight}px`;
+        textarea.style.overflowY = 'auto'; // הוספת גלילה רק אם עברנו את המקסימום
+      } else {
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.overflowY = 'hidden'; // הסתרת הגלילה כשהטקסט קצר
+      }
     }
   }, [input]);
 
@@ -34,7 +47,8 @@ export default function ChatInput({ input, setInput, handleSend, isLoading }: Ch
           onKeyDown={(e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
           placeholder="שלח הודעה ל-Chatene..."
           rows={1}
-          className="w-full bg-transparent text-white placeholder-gray-500 px-12 py-4 max-h-[200px] overflow-y-auto resize-none outline-none text-[15px] leading-relaxed rounded-[26px]"
+          // שיניתי כאן את ה-className: הורדתי overflow-y-auto קבוע והוספתי overflow-hidden כברירת מחדל
+          className="w-full bg-transparent text-white placeholder-gray-500 px-12 py-4 max-h-[200px] resize-none outline-none text-[15px] leading-relaxed rounded-[26px] overflow-hidden"
           dir="rtl"
         />
 

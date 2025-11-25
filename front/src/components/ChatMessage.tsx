@@ -13,7 +13,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
       {isUser ? (
         // בועת משתמש
         <div className="max-w-[85%] md:max-w-[70%] bg-[#334155] text-white px-5 py-3 rounded-[20px] rounded-br-md border border-white/5 shadow-sm">
-          <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{message.content}</p>
+          {/* התיקון: הוספתי break-words */}
+          <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed">{message.content}</p>
         </div>
       ) : (
         // בועת AI
@@ -23,7 +24,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           </div>
           <div className="flex flex-col gap-1 w-full min-w-0">
             <span className="text-sm font-semibold text-white/90 mb-1">Chatene</span>
-            <div className="text-gray-200 text-[15px] leading-relaxed whitespace-pre-wrap font-light">
+            {/* התיקון: הוספתי break-words גם כאן ליתר ביטחון */}
+            <div className="text-gray-200 text-[15px] leading-relaxed whitespace-pre-wrap break-words font-light">
               {message.content || <span className="animate-pulse">חושב...</span>}
             </div>
             
