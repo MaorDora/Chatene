@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { Menu, Dumbbell, Atom, Code2, Utensils } from 'lucide-react';
+import { Menu, Wrench, ShieldAlert, ClipboardList, Hammer, Zap } from 'lucide-react'; // החלפנו לאייקונים של אחזקה
 import Sidebar from './components/Sidebar';
 import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
 import SuggestionCard from './components/SuggestionCard';
-import { type Message } from './types'; 
+import {type Message } from './types'; 
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -13,7 +13,6 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // גלילה אוטומטית למטה
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -22,10 +21,8 @@ export default function App() {
     scrollToBottom();
   }, [messages]);
 
-  // --- הפונקציה החדשה שמתקשרת עם השרת האמיתי ---
   const fetchRealResponse = async (userText: string) => {
     try {
-      // 1. שליחת הבקשה לשרת ה-Python
       const response = await fetch('http://127.0.0.1:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -34,11 +31,9 @@ export default function App() {
 
       if (!response.body) return;
 
-      // 2. הכנת בועה ריקה לתשובה שתגיע
       const aiMsgId = (Date.now() + 1).toString();
       setMessages(prev => [...prev, { id: aiMsgId, role: 'ai', content: '', timestamp: Date.now() }]);
 
-      // 3. קריאת התשובה בחלקים (Streaming)
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let accumulatedText = '';
@@ -50,7 +45,6 @@ export default function App() {
         const chunk = decoder.decode(value, { stream: true });
         accumulatedText += chunk;
 
-        // עדכון הבועה בזמן אמת
         setMessages(prev => prev.map(msg => 
           msg.id === aiMsgId ? { ...msg, content: accumulatedText } : msg
         ));
@@ -58,7 +52,6 @@ export default function App() {
 
     } catch (error) {
       console.error("Error connecting to backend:", error);
-      // הצגת שגיאה למשתמש אם השרת לא זמין
       setMessages(prev => [...prev, { 
         id: Date.now().toString(), 
         role: 'ai', 
@@ -71,7 +64,6 @@ export default function App() {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // שמירת הודעת המשתמש
     const userMsg: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -83,7 +75,6 @@ export default function App() {
     setInput('');
     setIsLoading(true);
 
-    // קריאה לפונקציה האמיתית
     await fetchRealResponse(userMsg.content);
     
     setIsLoading(false);
@@ -106,7 +97,8 @@ export default function App() {
                <Menu size={24} />
              </button>
              <div className="flex items-center gap-2 cursor-pointer hover:bg-white/5 px-3 py-1.5 rounded-lg transition-colors">
-                <span className="font-semibold text-lg tracking-tight">Armored <span className="text-blue-400 font-normal">Tech</span></span>
+                {/* שינוי שם המותג ל-Chatene */}
+                <span className="font-semibold text-lg tracking-tight">Chatene <span className="text-blue-400 font-normal">AI</span></span>
              </div>
            </div>
         </header>
@@ -116,15 +108,37 @@ export default function App() {
             
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center flex-1 space-y-10 min-h-[400px]">
+                {/* אייקון מרכזי של מפתח ברגים */}
                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center ring-1 ring-white/10 shadow-2xl">
-                    <Atom size={32} className="text-white" />
+                    <Wrench size={32} className="text-white" />
                 </div>
                 
+                {/* כרטיסי הצעות חדשים בנושאי אחזקה */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full px-4">
-                  <SuggestionCard icon={<Dumbbell className="text-emerald-400" />} title="צור תוכנית אימון" subtitle="למתחילים בחדר כושר" onClick={() => setInput("צור תוכנית אימון למתחילים")} />
-                  <SuggestionCard icon={<Atom className="text-purple-400" />} title="הסבר מושג" subtitle="מחשוב קוונטי בפשטות" onClick={() => setInput("הסבר לי על מחשוב קוונטי")} />
-                  <SuggestionCard icon={<Code2 className="text-blue-400" />} title="כתוב קוד" subtitle="סקריפט Python לאוטומציה" onClick={() => setInput("כתוב סקריפט Python לגיבוי קבצים")} />
-                  <SuggestionCard icon={<Utensils className="text-orange-400" />} title="רעיון למתכון" subtitle="ארוחת ערב ב-15 דקות" onClick={() => setInput("תן לי מתכון לארוחת ערב מהירה")} />
+                  <SuggestionCard 
+                    icon={<ClipboardList className="text-emerald-400" />} 
+                    title="נוהל טיפול שבועי" 
+                    subtitle="רשימת תיוג לטיפול בטנק" 
+                    onClick={() => setInput("מהו נוהל הטיפול השבועי המומלץ לטנק?")} 
+                  />
+                  <SuggestionCard 
+                    icon={<Wrench className="text-blue-400" />} 
+                    title="אבחון תקלה" 
+                    subtitle="רעשים מהמנוע בעת הנעה" 
+                    onClick={() => setInput("יש רעש חריג מהמנוע בזמן הנעה, מה הסיבות האפשריות?")} 
+                  />
+                  <SuggestionCard 
+                    icon={<ShieldAlert className="text-red-400" />} 
+                    title="בטיחות בחשמל" 
+                    subtitle="עבודה עם מצברים במתח גבוה" 
+                    onClick={() => setInput("מהם דגשי הבטיחות בעבודה עם מצברים?")} 
+                  />
+                  <SuggestionCard 
+                    icon={<Hammer className="text-orange-400" />} 
+                    title="החלפת זחל" 
+                    subtitle="שלבים ודגשים טכניים" 
+                    onClick={() => setInput("תאר לי את השלבים להחלפת זחל פגום")} 
+                  />
                 </div>
               </div>
             ) : (
