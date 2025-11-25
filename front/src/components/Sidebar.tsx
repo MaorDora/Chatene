@@ -1,4 +1,4 @@
-import { Sparkles, Plus, MoreHorizontal } from 'lucide-react';
+import { Sparkles, Plus } from 'lucide-react';
 
 type SidebarProps = {
   isSidebarOpen: boolean;
@@ -30,16 +30,16 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, onNewChat }: 
         </div>
 
         <div className="flex-1 overflow-y-auto px-2 space-y-6">
-           {/* כאן תבוא ההיסטוריה בעתיד */}
+           {/* מקום להיסטוריה עתידית */}
            <div className="text-gray-500 text-xs text-center mt-10">אין היסטוריה עדיין</div>
         </div>
 
         <div className="p-3 mt-auto border-t border-white/5">
           <button className="flex items-center gap-3 w-full px-2 py-2 rounded-lg hover:bg-[#334155] transition-colors text-sm">
-             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-lg">AT</div>
+             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-lg">CH</div>
              <div className="flex flex-col items-start">
-               <span className="font-semibold text-gray-200">Armored Tech</span>
-               <span className="text-[10px] text-gray-400">תוכנית Pro</span>
+               <span className="font-semibold text-gray-200">Chatene</span>
+               <span className="text-[10px] text-gray-400">Maintenance AI</span>
              </div>
           </button>
         </div>

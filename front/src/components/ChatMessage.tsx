@@ -1,5 +1,5 @@
 import { Sparkles, Copy, ThumbsUp, ThumbsDown, User } from 'lucide-react';
-import { Message } from '../types';
+import { type Message } from '../types';
 
 type ChatMessageProps = {
   message: Message;
