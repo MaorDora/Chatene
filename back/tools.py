@@ -17,17 +17,9 @@ def get_all_tanks():
     הפונקציה הזו מחשבת סטטיסטיקות ומחזירה סיכום.
     """
     total_tanks = len(tanks_db)
-    
-    # ספירת סטטוסים (כמה כשירים, כמה מושבתים וכו')
     status_counts = Counter(tank["status"] for tank in tanks_db)
-    
-    # ספירת מודלים
     model_counts = Counter(tank["model"] for tank in tanks_db)
-    
-    # ספירת מיקומים
     location_counts = Counter(tank["location"] for tank in tanks_db)
-
-    # יצירת דוח סיכום קומפקטי
     summary_report = {
         "total_count": total_tanks,
         "breakdown_by_status": dict(status_counts),
@@ -38,7 +30,7 @@ def get_all_tanks():
     
     return json.dumps(summary_report, ensure_ascii=False)
 
-# --- הגדרת התפריט למודל (Schema) ---
+
 
 tools_schema = [
     {
@@ -68,7 +60,6 @@ tools_schema = [
     }
 ]
 
-# --- מיפוי שמות לפונקציות ---
 available_functions = {
     "get_tank_details": get_tank_details,
     "get_all_tanks": get_all_tanks
